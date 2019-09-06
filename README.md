@@ -1,35 +1,63 @@
-Apache Kylin
-============
+<!-- TOC -->
 
-[![Build Status](https://travis-ci.org/apache/kylin.svg?branch=master)](https://travis-ci.org/apache/kylin)
-[![License](https://img.shields.io/badge/license-Apache%202-4EB1BA.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
-[![Coverage Status](https://coveralls.io/repos/github/apache/kylin/badge.svg?branch=master)](https://coveralls.io/github/apache/kylin?branch=master)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/74f0139786cd4e8a8ce69bb0c17c2e71)](https://www.codacy.com/app/kyligence-git/kylin?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=apache/kylin&amp;utm_campaign=Badge_Grade)
-[![Quality Gate](https://sonarcloud.io/api/project_badges/quality_gate?project=org.apache.kylin%3Akylin)](https://sonarcloud.io/dashboard/index/org.apache.kylin%3Akylin)
-[![SonarCloud Coverage](https://sonarcloud.io/api/project_badges/measure?project=org.apache.kylin%3Akylin&metric=coverage)](https://sonarcloud.io/component_measures/metric/coverage/list?id=org.apache.kylin%3Akylin)
-[![SonarCloud Bugs](https://sonarcloud.io/api/project_badges/measure?project=org.apache.kylin%3Akylin&metric=bugs)](https://sonarcloud.io/component_measures/metric/reliability_rating/list?id=org.apache.kylin%3Akylin)
-[![SonarCloud Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=org.apache.kylin%3Akylin&metric=vulnerabilities)](https://sonarcloud.io/component_measures/metric/security_rating/list?id=org.apache.kylin%3Akylin)
+- [一. 术语说明](#1-术语说明)
+- [二. 操作流程](#2-操作流程)
+- [三. 操作示例](#3-操作示例)
+    - [3.1. 注册ftp类型数据源](#31-注册ftp类型数据源)
+    - [3.2. 注册hdfs数据源](#32-注册hdfs数据源)
+    - [3.3. 删除数据源](#33-删除数据源)
+- [四. 常见问题](#4-常见问题)
 
-> Extreme OLAP Engine for Big Data
+<!-- /TOC -->
 
-Apache Kylin is an open source Distributed Analytics Engine, contributed by eBay Inc., provides SQL interface and multi-dimensional analysis (OLAP) on Hadoop supporting extremely large datasets.
 
-For more details, see the website [http://kylin.apache.org](http://kylin.apache.org).
+# 一.术语说明
 
-Documentation
-=============
-Please refer to [http://kylin.apache.org/docs/](http://kylin.apache.org/docs/).
+- **数据源**
 
-Get Help
-============
-The fastest way to get response from our developers is to send email to our mail list <dev@kylin.apache.org>,   
-and remember to subscribe our mail list via <dev-subscribe@kylin.apache.org>
+即存储原始数据的介质，场见的有数据库，文件系统，消息队列等等。
 
-License
-============
-Please refer to [LICENSE](https://github.com/apache/kylin/blob/master/LICENSE) file.
+- **异构数据源**
+
+数据源下的数据有一种到多种格式不同或者类型各异的的结构化数据。
+
+- **同构数据源**
+
+数据源下的数据都是同一种文件格式的同类结构化数据。
 
 
 
+# 二.操作流程
 
 
+- 进入**数据采集**->**数据源管理**界面
+- 点击**注册数据源**
+- 选择**资源类型**
+- 填写注册信息，点击确定(有错误？见第四步)
+- 观察注册状态，从**注册中**变成**可消费**，即操作成功。
+
+# 三.操作示例
+
+## 3.1 注册ftp类型数据源
+
+资源类型选择**FTP**，填写FTP的IP,端口(ftp服务器的默认端口为21),用户名，密码，文件路径(注意，不包含尾部的分隔符，"/tmp/data/"不合法，应为"/tmp/data")。
+
+![](/api/images/f6c7795efb654ed3832073d033a22b23)
+
+## 3.2 注册hdfs数据源
+
+提前将文件存放入hdfs文件系统中，资源类型选择**HDFS**。填写hdfs路径
+
+![](/api/images/b5399c9435b94aa68df98f8373d2d4db)
+
+## 3.3 删除数据源
+进入**数据采集**->**数据源管理**界面，选择相应的数据源，点击删除。注意需要先**删除此数据源相关联的导入任务**。
+
+
+# 四.常见问题
+
+- 注册数据源提示 **该数据源以及存在， 请检查配置** ：检查是否有已注册的路径相同的数据源
+
+-注册数据源提示 **无法访问或者路径不存在**:检查网络情况和文件路径是否填错
+
+-注册数据源提示 **注册Connector错误，请检查后重新注册**: 检查后台confluent进程是否存活。
